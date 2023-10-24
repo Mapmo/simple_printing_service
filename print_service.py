@@ -12,7 +12,7 @@ parser = argparse.ArgumentParser(
 defaultVariableName = "DEFAULT"
 defaultInterval = 10
 parser.add_argument('-n', '--variableName', default=defaultVariableName)
-parser.add_argument('-i', '--interval', default=10)
+parser.add_argument('-i', '--interval', type=int, default=5)
 
 
 args = parser.parse_args()
