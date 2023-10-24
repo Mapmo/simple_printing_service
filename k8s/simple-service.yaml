@@ -2,33 +2,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: simple-service
+  name: simple-printing-service
   labels:
-    app: simple-service
+    app: simple-printing-service
 spec:
   selector:
     matchLabels:
-      app: simple-service
+      app: simple-printing-service
   replicas: 2
   template:
     metadata:
       labels:
-        app: simple-service
+        app: simple-printing-service
     spec:
       containers:
-      - name: simple-service
+      - name: simple-printing-service
         image: mapmo/simple_printing_service:0.0.4
         imagePullPolicy: Always
         env:
           - name: DEFAULT
             value: K8S default
-        command: ["python", "print_service.py", "-i", "1"]
+        command: ["python", "simple_printing_service.py", "-i", "1"]
         livenessProbe:
           exec:
             command:
               - "/bin/sh"
               - "-c"
-              - "ps aux | grep print_service.py | grep -qv grep"
+              - "ps aux | grep simple_printing_service.py | grep -qv grep"
           initialDelaySeconds: 10
           periodSeconds: 5
           failureThreshold: 1
@@ -40,10 +40,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: simple-service
+  name: simple-printing-service
 spec:
   selector:
-    app: simple-service
+    app: simple-printing-service
   ports:
-    - name: simple-service
+    - name: simple-printing-service
       port: 3000
