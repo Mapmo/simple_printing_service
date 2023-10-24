@@ -17,12 +17,25 @@ spec:
     spec:
       containers:
       - name: simple-service
-        image: mapmo/simple_printing_service:0.0.3
+        image: mapmo/simple_printing_service:0.0.4
         imagePullPolicy: Always
         env:
           - name: DEFAULT
             value: K8S default
-        command: ["python", "print_service.py", "-i", "0"]   
+        command: ["python", "print_service.py", "-i", "1"]
+        livenessProbe:
+          exec:
+            command:
+              - "/bin/sh"
+              - "-c"
+              - "ps aux | grep print_service.py | grep -qv grep"
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          failureThreshold: 1
+        lifecycle:
+          preStop:
+            exec:
+              command: ["pkill", "python"]
 ---
 apiVersion: v1
 kind: Service
