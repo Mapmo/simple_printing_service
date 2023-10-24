@@ -25,3 +25,4 @@ while True:
         print(f"Environment variable {args.variableName} is not set")
         print("Exiting...")
         break
+    
