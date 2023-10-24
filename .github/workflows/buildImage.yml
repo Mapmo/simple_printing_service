@@ -22,10 +22,25 @@ jobs:
         scheme: semver
         increment: patch
 
+    - name: Create Release
+      uses: actions/create-release@v1
+      id: create_release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version.outputs.version }}
+        release_name: Release ${{ steps.version.outputs.version }}
+    
+    - name: Log in to Docker Hub
+      uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
     - name: Build image
       uses: docker/build-push-action@v2
       with:
-        push: false
-        tags: "example/application:${{ steps.version.outputs.version }}"
+        push: true
+        tags: "mapmo/simple_printing_service:${{ steps.version.outputs.version }}"
         context: .
 
