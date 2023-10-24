@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-service
+  labels:
+    app: simple-service
+spec:
+  selector:
+    matchLabels:
+      app: simple-service
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: simple-service
+    spec:
+      containers:
+      - name: simple-service
+        image: mapmo/simple_printing_service:0.0.3
+        imagePullPolicy: Always
+        env:
+          - name: DEFAULT
+            value: K8S default
+        command: ["python", "print_service.py", "-i", "0"]   
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: simple-service
+spec:
+  selector:
+    app: simple-service
+  ports:
+    - name: simple-service
+      port: 3000
