@@ -5,11 +5,11 @@ on:
     branches:
       - master
     paths:
-      - "*.py"
+      - "**.py"
       - "Dockerfile"
 
 jobs:
-  build:
+  buildImage:
     runs-on: ubuntu-latest
 
     steps:
