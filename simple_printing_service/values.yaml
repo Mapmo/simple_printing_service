@@ -1,0 +1,6 @@
+serviceName: simple-printing-service
+replicasCount: 2
+imageName: mapmo/simple_printing_service
+imageTag: 0.0.6
+serviceScriptName: simple_printing_service.py
+port: 3000

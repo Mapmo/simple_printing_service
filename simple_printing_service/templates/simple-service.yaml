@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.serviceName }}
+  labels:
+    app: {{ .Values.serviceName }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.serviceName }}
+  replicas: {{ .Values.replicasCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.serviceName }}
+    spec:
+      containers:
+      - name: {{ .Values.serviceName }}
+        image: {{ .Values.imageName }}:{{ .Values.imageTag }}
+        imagePullPolicy: Always
+        env:
+          - name: DEFAULT
+            value: K8S default
+        command: ["python", {{ .Values.serviceScriptName }}, "-i", "1"]
+        livenessProbe:
+          exec:
+            command:
+              - "/bin/sh"
+              - "-c"
+              - "ps aux | grep {{ .Values.serviceScriptName }} | grep -qv grep"
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          failureThreshold: 1
+        lifecycle:
+          preStop:
+            exec:
+              command: ["pkill", "python"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.serviceName }}
+spec:
+  selector:
+    app: {{ .Values.serviceName }}
+  ports:
+    - name: {{ .Values.serviceName }}
+      port: {{ .Values.port }}
