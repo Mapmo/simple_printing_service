@@ -5,6 +5,7 @@ SCRIPT_NAME = simple_printing_service.py
 TEST_FILE = tests.py
 K8S_DIR = k8s/simple_printing_service.yaml
 HELM_DIR = simple_printing_service
+HELM_VALUES = ${HELM_DIR}/values.y
 HELM_RELEASE = simple
 
 build:
@@ -26,10 +27,10 @@ k8s.stop:
 	kubectl delete -f ${K8S_DIR}
 
 helm.start:
-	helm install ${HELM_RELEASE} ${HELM_DIR}
+	helm install ${HELM_RELEASE} ${HELM_DIR} --values ${HELM_VALUES}
 
 helm.upgrade:
-	helm upgrade ${HELM_RELEASE} ${HELM_DIR}
+	helm upgrade ${HELM_RELEASE} ${HELM_DIR} --values ${HELM_VALUES}
 
 helm.stop:
 	helm uninstall ${HELM_RELEASE}
@@ -39,3 +40,15 @@ install:
 
 test:
 	pytest ${TEST_FILE}
+
+tfinit:
+	cd terraform && terraform init
+
+tfplan:
+	cd terraform && terraform plan
+
+tfapply:
+	cd terraform && terraform apply
+
+tfdestroy:
+	cd terraform && terraform destroy
