@@ -8,14 +8,14 @@ HELM_DIR = simple_printing_service
 HELM_VALUES = ${HELM_DIR}/values.y
 HELM_RELEASE = simple
 
-build:
-	@docker build -t "${REPO_NAME}/${IMAGE_NAME}:${TAG_VERSION}" .
+help:
+	@python3 ${SCRIPT_NAME} -h
 
 start:
 	@python3 ${SCRIPT_NAME} -n SHELL -i 2
 
-help:
-	@python3 ${SCRIPT_NAME} -h
+build:
+	@docker build -t "${REPO_NAME}/${IMAGE_NAME}:${TAG_VERSION}" .
 
 container.start:
 	@docker run -t "${REPO_NAME}/${IMAGE_NAME}:${TAG_VERSION}" python3 simple_printing_service.py -i 1
