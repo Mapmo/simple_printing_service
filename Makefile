@@ -9,46 +9,50 @@ HELM_VALUES = ${HELM_DIR}/values.y
 HELM_RELEASE = simple
 
 build:
-	docker build -t "${REPO_NAME}/${IMAGE_NAME}:${TAG_VERSION}" .
+	@docker build -t "${REPO_NAME}/${IMAGE_NAME}:${TAG_VERSION}" .
 
 start:
-	python3 ${SCRIPT_NAME} -n SHELL -i 2
+	@python3 ${SCRIPT_NAME} -n SHELL -i 2
 
 help:
-	python3 ${SCRIPT_NAME} -h
+	@python3 ${SCRIPT_NAME} -h
 
 container.start:
-	docker run -t "${REPO_NAME}/${IMAGE_NAME}:${TAG_VERSION}" python3 simple_printing_service.py -i 1
+	@docker run -t "${REPO_NAME}/${IMAGE_NAME}:${TAG_VERSION}" python3 simple_printing_service.py -i 1
 
 k8s.start:
-	kubectl apply -f ${K8S_DIR}
+	@kubectl apply -f ${K8S_DIR}
 
 k8s.stop:
-	kubectl delete -f ${K8S_DIR}
+	@kubectl delete -f ${K8S_DIR}
 
 helm.start:
-	helm install ${HELM_RELEASE} ${HELM_DIR} --values ${HELM_VALUES}
+	@helm install ${HELM_RELEASE} ${HELM_DIR} --values ${HELM_VALUES}
 
 helm.upgrade:
-	helm upgrade ${HELM_RELEASE} ${HELM_DIR} --values ${HELM_VALUES}
+	@helm upgrade ${HELM_RELEASE} ${HELM_DIR} --values ${HELM_VALUES}
 
 helm.stop:
-	helm uninstall ${HELM_RELEASE}
+	@helm uninstall ${HELM_RELEASE}
 
 install:
-	pip3 install -r requirements.txt
+	@pip3 install -r requirements.txt
 
 test:
-	pytest ${TEST_FILE}
+	@pytest ${TEST_FILE}
 
 tfinit:
-	cd terraform && terraform init
+	@cd terraform && terraform init
 
 tfplan:
-	cd terraform && terraform plan
+	@cd terraform && terraform plan
 
 tfapply:
-	cd terraform && terraform apply
+	@cd terraform && terraform apply
 
 tfdestroy:
-	cd terraform && terraform destroy
+	@cd terraform && terraform destroy
+
+style:
+	@autopep8 -ir .
+	@terraform fmt -recursive
