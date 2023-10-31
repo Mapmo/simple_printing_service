@@ -19,9 +19,9 @@ spec:
       - name: simple-printing-service
         image: mapmo/simple_printing_service:0.0.6
         imagePullPolicy: Always
-        env:
-          - name: DEFAULT
-            value: K8S default
+        envFrom:
+          - configMapRef:
+              name: env-vars
         command: ["python", "simple_printing_service.py", "-i", "1"]
         livenessProbe:
           exec:
